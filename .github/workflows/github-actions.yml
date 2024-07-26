@@ -1,4 +1,4 @@
-name: CI/CD using github actions & docker
+name: CI/CD using github actions & docker & docker compose
 
 on:
   push:
@@ -101,4 +101,4 @@ jobs:
           script: |
             sudo docker-compose -f docker-compose.yml pull
             sudo docker-compose -f docker-compose.yml up -d
-            sudo docker image prune -f
+            sudo docker image prune -f 
