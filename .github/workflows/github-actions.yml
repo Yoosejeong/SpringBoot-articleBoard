@@ -52,6 +52,10 @@ jobs:
           sudo curl -L "https://github.com/docker/compose/releases/download/v2.19.0/docker-compose-linux-x86_64" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
 
+      - name: Create docker-compose.yml from secret
+        run: |
+          echo "${{ secrets.DOCKER_COMPOSE_YML }}" > docker-compose.yml
+
       - name: Pull and Start Services
         run: |
           docker-compose -f docker-compose.yml up -d
@@ -80,8 +84,7 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           envs: GITHUB_SHA
           script: |
-            sudo docker ps
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/docker-test-prod
+            sudo docker-compose -f docker-compose.yml pull
             sudo docker-compose -f docker-compose.yml up -d
             sudo docker image prune -f
 
@@ -96,7 +99,6 @@ jobs:
           port: 22
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
-            sudo docker ps
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/docker-test-dev
+            sudo docker-compose -f docker-compose.yml pull
             sudo docker-compose -f docker-compose.yml up -d
             sudo docker image prune -f
