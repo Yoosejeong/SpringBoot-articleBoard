@@ -80,10 +80,10 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           envs: GITHUB_SHA
           script: |
-            sudo docker ps
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/docker-test-prod
+            sudo docker-compose -f docker-compose.yml pull
             sudo docker-compose -f docker-compose.yml up -d
             sudo docker image prune -f
+          timeout: 15m # 타임아웃을 15분으로 설정
 
       - name: Deploy to dev
         uses: appleboy/ssh-action@master
@@ -96,7 +96,7 @@ jobs:
           port: 22
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
-            sudo docker ps
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/docker-test-dev
+            sudo docker-compose -f docker-compose.yml pull
             sudo docker-compose -f docker-compose.yml up -d
             sudo docker image prune -f
+          timeout: 15m # 타임아웃을 15분으로 설정
